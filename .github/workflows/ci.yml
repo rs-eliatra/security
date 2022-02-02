@@ -43,7 +43,7 @@ jobs:
 
 
     - name: KafkaSinkTest
-      run: ./gradlew clean :test --tests "org.opensearch.security.auditlog.sink.KafkaSinkTest"
+      run: ./gradlew --info clean :test --tests "org.opensearch.security.auditlog.sink.KafkaSinkTest"
 
     - name: Checkstyle
       run: ./gradlew clean checkstyleMain checkstyleTest

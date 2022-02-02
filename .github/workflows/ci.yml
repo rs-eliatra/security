@@ -19,7 +19,7 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
-        jdk: [8, 11, 14]
+        jdk: [8]
 
     steps:
 
@@ -42,6 +42,9 @@ jobs:
         path: ~/.m2
         key: ${{ runner.os }}-m2-${{ hashFiles('**/build.gradle') }}
         restore-keys: ${{ runner.os }}-m2
+
+    - name: Test KafkaClient
+      run: ./gradlew :test --tests "org.opensearch.security.auditlog.sink.KafkaSinkTest.testKafka" --info
 
     - name: Checkstyle
       run: ./gradlew clean checkstyleMain checkstyleTest

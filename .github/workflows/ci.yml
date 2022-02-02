@@ -32,16 +32,11 @@ jobs:
       uses: actions/checkout@v2
 
     - name: Cache Maven packages
-      uses: actions/cache@v2
+      uses: actions/cache@v1
       with:
-        path: |
-          ~/.gradle/caches
-          ~/.gradle/wrapper
-        key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
-        restore-keys: |
-          ${{ runner.os }}-gradle-
-
-
+        path: ~/.m2
+        key: ${{ runner.os }}-m2-${{ hashFiles('**/build.gradle') }}
+        restore-keys: ${{ runner.os }}-m2
     - name: KafkaSinkTest
       run: ./gradlew --info clean :test --tests "org.opensearch.security.auditlog.sink.KafkaSinkTest"
 

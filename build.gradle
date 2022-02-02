@@ -60,7 +60,7 @@ ext {
 configurations.testImplementation {
     if (it.state != Configuration.State.UNRESOLVED) return
     resolutionStrategy {
-        force 'org.apache.kafka:kafka-clients:2.0.1:test'
+        force 'org.apache.kafka:kafka-clients:2.5.:test'
     }
 }
 

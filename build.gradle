@@ -141,9 +141,7 @@ dependencies {
 //    implementation 'org.apache.kafka:kafka_2.12:2.5.0'
     testImplementation ('org.apache.kafka:kafka_2.12:2.5.0:test')
 
-    testImplementation ('org.scala-lang:scala-library:2.12.10') {
-        force = true
-    }
+    implementation 'org.scala-lang:scala-library:2.12.10'
     compileOnly 'io.netty:netty-tcnative:2.0.25.Final'
     compileOnly "org.opensearch:opensearch:${opensearch_version}"
 }

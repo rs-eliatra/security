@@ -15,6 +15,9 @@
 
 package org.opensearch.security.auditlog.compliance;
 
+import org.opensearch.client.Client;
+import org.opensearch.client.RequestOptions;
+import org.opensearch.client.RestHighLevelClient;
 import org.opensearch.security.auditlog.AuditTestUtils;
 import org.opensearch.security.auditlog.config.AuditConfig;
 import org.opensearch.security.compliance.ComplianceConfig;
@@ -23,7 +26,6 @@ import org.apache.http.Header;
 import org.apache.http.HttpStatus;
 import org.opensearch.action.index.IndexRequest;
 import org.opensearch.action.support.WriteRequest.RefreshPolicy;
-import org.opensearch.client.transport.TransportClient;
 import org.opensearch.common.settings.Settings;
 import org.junit.Assert;
 import org.junit.Test;
@@ -216,12 +218,12 @@ public class ComplianceAuditlogTest extends AbstractAuditlogiUnitTest {
         TestAuditlogImpl.clear();
         setup(additionalSettings);
 
-        try (TransportClient tc = getInternalTransportClient()) {
+        try (RestHighLevelClient restHighLevelClient = getRestClient(clusterInfo, "kirk-keystore.jks", "truststore.jks")) {
             for(IndexRequest ir: new DynamicSecurityConfig().setSecurityRoles("roles_2.yml").getDynamicConfig(getResourceFolder())) {
-                tc.index(ir).actionGet();
+                restHighLevelClient.index(ir, RequestOptions.DEFAULT);
             }
-
         }
+
 
         HttpResponse response = rh.executeGetRequest("_search?pretty", encodeBasicHeader("admin", "admin"));
         Assert.assertEquals(HttpStatus.SC_OK, response.getStatusCode());
@@ -263,7 +265,7 @@ public class ComplianceAuditlogTest extends AbstractAuditlogiUnitTest {
 
         setup(additionalSettings);
 
-        try (TransportClient tc = getInternalTransportClient()) {
+        try (Client tc = getClient()) {
 
             for(IndexRequest ir: new DynamicSecurityConfig().setSecurityRoles("roles_2.yml").getDynamicConfig(getResourceFolder())) {
                 tc.index(ir).actionGet();
@@ -299,7 +301,7 @@ public class ComplianceAuditlogTest extends AbstractAuditlogiUnitTest {
         setup(additionalSettings);
 
 
-        try (TransportClient tc = getInternalTransportClient()) {
+        try (Client tc = getClient()) {
             tc.prepareIndex("humanresources", "employees", "100")
             .setRefreshPolicy(RefreshPolicy.IMMEDIATE)
             .setSource("Age", 456)
@@ -384,7 +386,7 @@ public class ComplianceAuditlogTest extends AbstractAuditlogiUnitTest {
         setup(additionalSettings);
 
 
-        try (TransportClient tc = getInternalTransportClient()) {
+        try (Client tc = getClient()) {
             tc.prepareIndex("humanresources", "employees", "100")
             .setRefreshPolicy(RefreshPolicy.IMMEDIATE)
             .setSource("Age", 456)

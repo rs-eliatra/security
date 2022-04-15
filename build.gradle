@@ -85,6 +85,13 @@ licenseHeaders.enabled=false
 loggerUsageCheck.enabled=false
 testingConventions.enabled=false
 thirdPartyAudit.enabled=false
+validateNebulaPom.enabled = false
+
+tasks.whenTaskAdded {task ->
+    if(task.name.contains("validateMavenPom")) {
+        task.enabled = false
+    }
+}
 
 //fixme otherwise build fails, javadocs are invalid
 javadoc.enabled=false

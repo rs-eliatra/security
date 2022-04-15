@@ -80,6 +80,8 @@ public class SecuritySSLReloadCertsActionTests extends SingleClusterTest {
 
         String certDetailsResponse = rh.executeSimpleRequest(GET_CERT_DETAILS_ENDPOINT);
 
+        //fixme change it to jackson objectNode & remove implementation 'net.minidev:json-smart:2.4.7'??
+        //fixme this lib is used only in 2 tests
         JSONObject expectedJsonResponse = new JSONObject();
         expectedJsonResponse.appendField("http_certificates_list", NODE_CERT_DETAILS);
         expectedJsonResponse.appendField("transport_certificates_list", NODE_CERT_DETAILS);

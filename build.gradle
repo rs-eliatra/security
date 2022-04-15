@@ -211,6 +211,12 @@ dependencies {
     testImplementation 'org.apache.kafka:kafka_2.13:2.8.1:test'
     testImplementation 'org.apache.kafka:kafka-clients:2.8.1:test'
     compileOnly "org.opensearch:opensearch:${opensearch_version}"
+    testImplementation group: 'com.google.guava', name: 'failureaccess', version: '1.0.1'
+    testImplementation group: 'org.apache.commons', name: 'commons-text', version: '1.4'
+    testImplementation group: 'com.eclipsesource.minimal-json', name: 'minimal-json', version: '0.9.5'
+    testImplementation group: 'net.minidev', name: 'accessors-smart', version: '2.4.7'
+    testImplementation group: 'net.minidev', name: 'json-smart', version: '2.4.7'
+
 }
 
 group = 'org.opensearch'

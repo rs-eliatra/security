@@ -96,6 +96,20 @@ tasks.whenTaskAdded {task ->
 //fixme otherwise build fails, javadocs are invalid
 javadoc.enabled=false
 
+configurations.testCompileClasspath {
+    if (it.state != Configuration.State.UNRESOLVED) return
+    resolutionStrategy {
+        exclude group: 'org.opensearch.test', module: 'framework'
+    }
+}
+
+configurations.testRuntimeClasspath {
+    if (it.state != Configuration.State.UNRESOLVED) return
+    resolutionStrategy {
+        exclude group: 'org.opensearch.test', module: 'framework'
+    }
+}
+
 repositories {
     mavenLocal()
     maven { url "https://aws.oss.sonatype.org/content/repositories/snapshots" }

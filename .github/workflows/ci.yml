@@ -39,7 +39,7 @@ jobs:
       run: ./gradlew clean build -Dbuild.snapshot=false -x test
 
     - name: Test
-      run: OPENDISTRO_SECURITY_TEST_OPENSSL_OPT=true ./gradlew test -i
+      run: OPENDISTRO_SECURITY_TEST_OPENSSL_OPT=true ./gradlew test
 
     - name: Coverage
       uses: codecov/codecov-action@v1

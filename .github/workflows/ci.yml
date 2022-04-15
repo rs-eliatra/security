@@ -100,7 +100,7 @@ jobs:
         echo ${{ env.SECURITY_PLUGIN_VERSION_ONLY_NUMBER }}
         echo ${{ env.TEST_QUALIFIER }}
 
-    - run: ./gradlew clean assemble && test -s ./build/opensearch-security-${{ env.SECURITY_PLUGIN_VERSION }}.jar
+    - run: ./gradlew clean assemble && test -i -s ./build/distributions/opensearch-security-${{ env.SECURITY_PLUGIN_VERSION }}.jar
 
     - run: ./gradlew clean assemble -Dbuild.snapshot=false && test -s ./build/opensearch-security-${{ env.SECURITY_PLUGIN_VERSION_NO_SNAPSHOT }}.jar
 

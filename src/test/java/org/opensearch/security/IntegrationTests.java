@@ -60,13 +60,13 @@ import org.opensearch.security.http.HTTPClientCertAuthenticator;
 import org.opensearch.security.ssl.util.SSLConfigConstants;
 import org.opensearch.security.support.ConfigConstants;
 import org.opensearch.security.test.DynamicSecurityConfig;
-import org.opensearch.security.test.SingleClusterTest;
+import org.opensearch.security.test.SingleClusterTests;
 import org.opensearch.security.test.helper.file.FileHelper;
 import org.opensearch.security.test.helper.rest.RestHelper;
 
 import static org.opensearch.security.DefaultObjectMapper.readTree;
 
-public class IntegrationTests extends SingleClusterTest {
+public class IntegrationTests extends SingleClusterTests {
 
     @Test
     public void testSearchScroll() throws Exception {

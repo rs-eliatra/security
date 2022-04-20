@@ -16,7 +16,7 @@ package org.opensearch.security;
 
 import org.opensearch.security.support.ConfigConstants;
 import org.opensearch.security.support.SecuritySettings;
-import org.opensearch.security.test.SingleClusterTest;
+import org.opensearch.security.test.SingleClusterTests;
 import org.opensearch.security.test.helper.rest.RestHelper;
 import org.opensearch.security.test.helper.rest.RestHelper.HttpResponse;
 import org.apache.http.HttpStatus;
@@ -24,7 +24,7 @@ import org.opensearch.common.settings.Settings;
 import org.junit.Assert;
 import org.junit.Test;
 
-public class EncryptionInTransitMigrationTests extends SingleClusterTest {
+public class EncryptionInTransitMigrationTests extends SingleClusterTests {
 
     @Test
     public void testSslOnlyModeDualModeEnabled() throws Exception {

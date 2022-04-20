@@ -37,10 +37,10 @@ import org.junit.Test;
 
 import org.opensearch.security.test.helper.rest.RestHelper.HttpResponse;
 import org.opensearch.security.test.DynamicSecurityConfig;
-import org.opensearch.security.test.SingleClusterTest;
+import org.opensearch.security.test.SingleClusterTests;
 import org.opensearch.security.test.helper.rest.RestHelper;
 
-public class HealthTests extends SingleClusterTest {
+public class HealthTests extends SingleClusterTests {
     
     @Test
     public void testHealth() throws Exception {

@@ -39,10 +39,10 @@ import org.junit.Test;
 import org.opensearch.security.test.helper.rest.RestHelper.HttpResponse;
 import org.opensearch.security.support.ConfigConstants;
 import org.opensearch.security.test.DynamicSecurityConfig;
-import org.opensearch.security.test.SingleClusterTest;
+import org.opensearch.security.test.SingleClusterTests;
 import org.opensearch.security.test.helper.rest.RestHelper;
 
-public class SecurityRolesTests extends SingleClusterTest {
+public class SecurityRolesTests extends SingleClusterTests {
 
 	@Test
 	public void testSecurityRolesAnon() throws Exception {

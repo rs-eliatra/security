@@ -9,11 +9,11 @@ import org.apache.http.HttpStatus;
 import org.junit.Assert;
 import org.junit.Test;
 import org.opensearch.common.settings.Settings;
-import org.opensearch.security.test.SingleClusterTest;
+import org.opensearch.security.test.SingleClusterTests;
 import org.opensearch.security.test.helper.file.FileHelper;
 import org.opensearch.security.test.helper.rest.RestHelper;
 
-public class SecurityAdminIEndpointsTests extends SingleClusterTest {
+public class SecurityAdminIEndpointsTests extends SingleClusterTests {
 
     @Test
     public void testNoSSL() throws Exception {

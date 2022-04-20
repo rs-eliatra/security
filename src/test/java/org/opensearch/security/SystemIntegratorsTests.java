@@ -38,12 +38,12 @@ import org.junit.Test;
 
 import org.opensearch.security.test.helper.rest.RestHelper.HttpResponse;
 import org.opensearch.security.support.ConfigConstants;
-import org.opensearch.security.test.SingleClusterTest;
+import org.opensearch.security.test.SingleClusterTests;
 import org.opensearch.security.test.helper.cluster.ClusterConfiguration;
 import org.opensearch.security.test.helper.rest.RestHelper;
 import com.google.common.collect.Lists;
 
-public class SystemIntegratorsTests extends SingleClusterTest {
+public class SystemIntegratorsTests extends SingleClusterTests {
     
     @Test
     public void testInjectedUserMalformed() throws Exception {

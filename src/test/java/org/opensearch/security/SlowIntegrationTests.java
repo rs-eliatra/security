@@ -42,7 +42,7 @@ import org.opensearch.node.PluginAwareNode;
 import org.opensearch.security.ssl.util.SSLConfigConstants;
 import org.opensearch.security.support.ConfigConstants;
 import org.opensearch.security.test.helper.rest.RestHelper;
-import org.opensearch.security.test.SingleClusterTest;
+import org.opensearch.security.test.SingleClusterTests;
 import org.opensearch.security.test.helper.cluster.ClusterConfiguration;
 import org.opensearch.security.test.helper.file.FileHelper;
 import org.opensearch.transport.Netty4Plugin;
@@ -50,7 +50,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import java.io.IOException;
 
-public class SlowIntegrationTests extends SingleClusterTest {
+public class SlowIntegrationTests extends SingleClusterTests {
 
     @Test
     public void testCustomInterclusterRequestEvaluator() throws Exception {

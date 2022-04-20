@@ -39,9 +39,10 @@ import org.opensearch.cluster.health.ClusterHealthStatus;
 import org.opensearch.node.Node;
 import org.opensearch.node.PluginAwareNode;
 import org.opensearch.security.OpenSearchSecurityPlugin;
-import org.opensearch.security.RolesInjectorIntegTest;
+import org.opensearch.security.RolesInjectorIntegTests;
 import org.opensearch.security.ssl.util.SSLConfigConstants;
 import org.opensearch.security.support.ConfigConstants;
+import org.opensearch.security.test.AbstractSecurityUnitTests;
 import org.opensearch.security.test.NodeSettingsSupplier;
 import org.opensearch.security.test.helper.file.FileHelper;
 import org.apache.http.HttpStatus;
@@ -61,7 +62,6 @@ import org.junit.runners.Parameterized.Parameter;
 import org.junit.runners.Parameterized.Parameters;
 
 import org.opensearch.security.test.helper.rest.RestHelper.HttpResponse;
-import org.opensearch.security.test.AbstractSecurityUnitTest;
 import org.opensearch.security.test.DynamicSecurityConfig;
 import org.opensearch.security.test.helper.cluster.ClusterConfiguration;
 import org.opensearch.security.test.helper.cluster.ClusterHelper;
@@ -75,7 +75,7 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.not;
 
 @RunWith(Parameterized.class)
-public class CrossClusterSearchTests extends AbstractSecurityUnitTest {
+public class CrossClusterSearchTests extends AbstractSecurityUnitTests {
     
     private final ClusterHelper cl1 = new ClusterHelper("crl1_n"+num.incrementAndGet()+"_f"+System.getProperty("forkno")+"_t"+System.nanoTime());
     private final ClusterHelper cl2 = new ClusterHelper("crl2_n"+num.incrementAndGet()+"_f"+System.getProperty("forkno")+"_t"+System.nanoTime());
@@ -1055,9 +1055,9 @@ public class CrossClusterSearchTests extends AbstractSecurityUnitTest {
 
         System.out.println("###################### with invalid role injection");
         //1. With invalid roles injection
-        RolesInjectorIntegTest.RolesInjectorPlugin.injectedRoles = "invalid_user|invalid_role";
+        RolesInjectorIntegTests.RolesInjectorPlugin.injectedRoles = "invalid_user|invalid_role";
         try (Node node = new PluginAwareNode(false, tcSettings, Netty4Plugin.class,
-                OpenSearchSecurityPlugin.class, RolesInjectorIntegTest.RolesInjectorPlugin.class).start()) {
+                OpenSearchSecurityPlugin.class, RolesInjectorIntegTests.RolesInjectorPlugin.class).start()) {
             waitOrThrow(node.client());
             Client remoteClient = node.client().getRemoteClusterClient("cross_cluster_two");
             GetRequest getReq = new GetRequest("twitter", "0");
@@ -1075,9 +1075,9 @@ public class CrossClusterSearchTests extends AbstractSecurityUnitTest {
 
         System.out.println("###################### with valid role injection");
         //2. With valid roles injection
-        RolesInjectorIntegTest.RolesInjectorPlugin.injectedRoles = "valid_user|opendistro_security_all_access";
+        RolesInjectorIntegTests.RolesInjectorPlugin.injectedRoles = "valid_user|opendistro_security_all_access";
         try (Node node = new PluginAwareNode(false, tcSettings, Netty4Plugin.class,
-                OpenSearchSecurityPlugin.class, RolesInjectorIntegTest.RolesInjectorPlugin.class).start()) {
+                OpenSearchSecurityPlugin.class, RolesInjectorIntegTests.RolesInjectorPlugin.class).start()) {
             waitOrThrow(node.client());
             Client remoteClient = node.client().getRemoteClusterClient("cross_cluster_two");
             GetRequest getReq = new GetRequest("twitter", "0");

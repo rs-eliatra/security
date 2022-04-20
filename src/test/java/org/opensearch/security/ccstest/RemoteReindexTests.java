@@ -31,7 +31,7 @@
 package org.opensearch.security.ccstest;
 
 import org.opensearch.client.Client;
-import org.opensearch.security.test.AbstractSecurityUnitTest;
+import org.opensearch.security.test.AbstractSecurityUnitTests;
 import org.apache.http.HttpStatus;
 import org.opensearch.action.admin.indices.create.CreateIndexRequest;
 import org.opensearch.action.index.IndexRequest;
@@ -48,7 +48,7 @@ import org.opensearch.security.test.helper.cluster.ClusterHelper;
 import org.opensearch.security.test.helper.cluster.ClusterInfo;
 import org.opensearch.security.test.helper.rest.RestHelper;
 
-public class RemoteReindexTests extends AbstractSecurityUnitTest {
+public class RemoteReindexTests extends AbstractSecurityUnitTests {
     
     private final ClusterHelper cl1 = new ClusterHelper("crl1_n"+num.incrementAndGet()+"_f"+System.getProperty("forkno")+"_t"+System.nanoTime());
     private final ClusterHelper cl2 = new ClusterHelper("crl2_n"+num.incrementAndGet()+"_f"+System.getProperty("forkno")+"_t"+System.nanoTime());

@@ -21,6 +21,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.opensearch.security.test.SingleClusterTests;
 import org.opensearch.security.tools.SecurityAdmin;
 import org.apache.http.HttpStatus;
 import org.opensearch.common.settings.Settings;
@@ -30,11 +31,10 @@ import org.junit.Test;
 import org.opensearch.security.test.helper.rest.RestHelper.HttpResponse;
 import org.opensearch.security.ssl.util.SSLConfigConstants;
 import org.opensearch.security.test.DynamicSecurityConfig;
-import org.opensearch.security.test.SingleClusterTest;
 import org.opensearch.security.test.helper.file.FileHelper;
 import org.opensearch.security.test.helper.rest.RestHelper;
 
-public class SecurityAdminTests extends SingleClusterTest {
+public class SecurityAdminTests extends SingleClusterTests {
     
     @Test
     public void testSecurityAdmin() throws Exception {

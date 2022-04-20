@@ -48,14 +48,14 @@ import org.junit.Test;
 
 import org.opensearch.security.support.ConfigConstants;
 import org.opensearch.security.test.DynamicSecurityConfig;
-import org.opensearch.security.test.SingleClusterTest;
+import org.opensearch.security.test.SingleClusterTests;
 import org.opensearch.security.test.helper.cluster.ClusterConfiguration;
 import org.opensearch.security.test.helper.file.FileHelper;
 import org.opensearch.security.test.helper.rest.RestHelper;
 import org.opensearch.security.test.helper.rest.RestHelper.HttpResponse;
 
 @Ignore("subject for manual execution")
-public class TracingTests extends SingleClusterTest {
+public class TracingTests extends SingleClusterTests {
 
     @Test
     public void testAdvancedMapping() throws Exception {

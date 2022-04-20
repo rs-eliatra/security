@@ -37,7 +37,7 @@ import java.util.List;
 import org.opensearch.client.Client;
 import org.opensearch.security.support.ConfigConstants;
 import org.opensearch.security.test.DynamicSecurityConfig;
-import org.opensearch.security.test.SingleClusterTest;
+import org.opensearch.security.test.SingleClusterTests;
 import org.opensearch.security.test.helper.rest.RestHelper;
 import org.apache.http.Header;
 import org.apache.http.HttpStatus;
@@ -60,7 +60,7 @@ import org.junit.Test;
 import static junit.framework.TestCase.assertTrue;
 import static org.junit.Assert.assertEquals;
 
-public class ProtectedIndicesTests extends SingleClusterTest {
+public class ProtectedIndicesTests extends SingleClusterTests {
 
     private static final List<String> listOfIndexesToTest = Arrays.asList("logs1", "logs2", "logs3", "no_match");
     private static final List<String> listOfIndexPatternsToTest = Arrays.asList("*logs*", "logs*", "*lo*");

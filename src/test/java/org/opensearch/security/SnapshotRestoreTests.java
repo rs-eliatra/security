@@ -52,12 +52,12 @@ import org.opensearch.security.action.configupdate.ConfigUpdateAction;
 import org.opensearch.security.action.configupdate.ConfigUpdateRequest;
 import org.opensearch.security.action.configupdate.ConfigUpdateResponse;
 import org.opensearch.security.test.DynamicSecurityConfig;
-import org.opensearch.security.test.SingleClusterTest;
+import org.opensearch.security.test.SingleClusterTests;
 import org.opensearch.security.test.helper.cluster.ClusterConfiguration;
 import org.opensearch.security.test.helper.rest.RestHelper;
 
 @RunWith(Parameterized.class)
-public class SnapshotRestoreTests extends SingleClusterTest {
+public class SnapshotRestoreTests extends SingleClusterTests {
 
     @Parameters
     public static Collection<ClusterConfiguration> data() {

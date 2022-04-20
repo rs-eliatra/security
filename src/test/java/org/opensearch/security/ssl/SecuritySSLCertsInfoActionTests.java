@@ -17,7 +17,7 @@ package org.opensearch.security.ssl;
 
 import org.opensearch.security.ssl.util.SSLConfigConstants;
 import org.opensearch.security.support.ConfigConstants;
-import org.opensearch.security.test.SingleClusterTest;
+import org.opensearch.security.test.SingleClusterTests;
 import org.opensearch.security.test.helper.file.FileHelper;
 import org.opensearch.security.test.helper.rest.RestHelper;
 import com.google.common.collect.ImmutableList;
@@ -30,7 +30,7 @@ import org.junit.Test;
 import java.util.List;
 import java.util.Map;
 
-public class SecuritySSLCertsInfoActionTests extends SingleClusterTest {
+public class SecuritySSLCertsInfoActionTests extends SingleClusterTests {
 
     private final String ENDPOINT = "_opendistro/_security/api/ssl/certs";
 

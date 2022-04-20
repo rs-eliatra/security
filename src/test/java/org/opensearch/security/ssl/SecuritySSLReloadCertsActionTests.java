@@ -18,7 +18,7 @@ package org.opensearch.security.ssl;
 import org.opensearch.security.ssl.util.SSLConfigConstants;
 import org.opensearch.security.support.ConfigConstants;
 import org.opensearch.security.test.DynamicSecurityConfig;
-import org.opensearch.security.test.SingleClusterTest;
+import org.opensearch.security.test.SingleClusterTests;
 import org.opensearch.security.test.helper.cluster.ClusterConfiguration;
 import org.opensearch.security.test.helper.file.FileHelper;
 import org.opensearch.security.test.helper.rest.RestHelper;
@@ -35,7 +35,7 @@ import java.io.File;
 import java.util.List;
 import java.util.Map;
 
-public class SecuritySSLReloadCertsActionTests extends SingleClusterTest {
+public class SecuritySSLReloadCertsActionTests extends SingleClusterTests {
 
     private final String GET_CERT_DETAILS_ENDPOINT = "_opendistro/_security/api/ssl/certs";
     private final String RELOAD_TRANSPORT_CERTS_ENDPOINT = "_opendistro/_security/api/ssl/transport/reloadcerts";
@@ -80,6 +80,8 @@ public class SecuritySSLReloadCertsActionTests extends SingleClusterTest {
 
         String certDetailsResponse = rh.executeSimpleRequest(GET_CERT_DETAILS_ENDPOINT);
 
+        //fixme change it to jackson objectNode & remove implementation 'net.minidev:json-smart:2.4.7'??
+        //fixme this lib is used only in 2 tests
         JSONObject expectedJsonResponse = new JSONObject();
         expectedJsonResponse.appendField("http_certificates_list", NODE_CERT_DETAILS);
         expectedJsonResponse.appendField("transport_certificates_list", NODE_CERT_DETAILS);

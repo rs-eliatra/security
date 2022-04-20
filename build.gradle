@@ -28,6 +28,23 @@
  * under the License.
  */
 
+buildscript {
+    ext {
+        opensearch_version = System.getProperty("opensearch.version", "2.0.0-alpha1-SNAPSHOT")
+    }
+
+    repositories {
+        mavenLocal()
+        maven { url "https://aws.oss.sonatype.org/content/repositories/snapshots" }
+        mavenCentral()
+        maven { url "https://plugins.gradle.org/m2/" }
+    }
+
+    dependencies {
+        classpath "org.opensearch.gradle:build-tools:${opensearch_version}"
+    }
+}
+
 plugins {
     id 'java'
     id 'maven-publish'
@@ -43,9 +60,77 @@ plugins {
     id "com.google.osdetector" version "1.7.0"
     id "org.gradle.test-retry" version "1.3.1"
 }
+
+apply plugin: 'opensearch.opensearchplugin'
+
 import org.gradle.crypto.checksum.Checksum
 
 import java.text.SimpleDateFormat
+
+opensearchplugin {
+    name = "opensearch-security"
+    description = "Provide access control related features for OpenSearch"
+    classname = "org.opensearch.security.OpenSearchSecurityPlugin"
+    licenseFile = rootProject.file('LICENSE.txt')
+    noticeFile = rootProject.file('NOTICE.txt')
+}
+
+forbiddenApisMain.enabled=false
+forbiddenApisTest.enabled=false
+dependencyLicenses.enabled=false
+filepermissions.enabled=false
+forbiddenPatterns.enabled=false
+jarHell.enabled=false
+licenseHeaders.enabled=false
+loggerUsageCheck.enabled=false
+testingConventions.enabled=false
+thirdPartyAudit.enabled=false
+validateNebulaPom.enabled = false
+
+tasks.whenTaskAdded {task ->
+    if(task.name.contains("validateMavenPom")) {
+        task.enabled = false
+    }
+}
+
+//fixme otherwise build fails, javadocs are invalid
+javadoc.enabled=false
+
+configurations.testCompileClasspath {
+    if (it.state != Configuration.State.UNRESOLVED) return
+    resolutionStrategy {
+        exclude group: 'org.opensearch.test', module: 'framework'
+    }
+}
+
+task copyResourcesRequiredInTests(type: Copy) {
+    into("${buildDir}/testrun/test")
+
+    from("${projectDir}/src/test/resources") {
+        into("src/test/resources")
+    }
+
+    from("${projectDir}/src/main/resources") {
+        into("src/main/resources")
+    }
+
+    from("${projectDir}/securityconfig") {
+        into("securityconfig")
+    }
+
+    from("${projectDir}/legacy") {
+        into("legacy")
+    }
+}
+
+test.dependsOn copyResourcesRequiredInTests
+
+configurations.testRuntimeClasspath {
+    if (it.state != Configuration.State.UNRESOLVED) return
+    resolutionStrategy {
+        exclude group: 'org.opensearch.test', module: 'framework'
+    }
+}
 
 repositories {
     mavenLocal()
@@ -73,21 +158,24 @@ ext {
 configurations.all {
     resolutionStrategy {
         force 'commons-codec:commons-codec:1.14'
-        force 'org.apache.santuario:xmlsec:2.2.3'
+        force 'org.apache.santuario:xmlsec:2.2.3' //fixme can we remove it? I declared it directly in dependencies because of disabled transitive dependencies
         force 'org.cryptacular:cryptacular:1.1.4'
-        force 'net.minidev:json-smart:2.4.7'
+        force 'net.minidev:json-smart:2.4.7' //fixme can we remove it? I declared it directly in dependencies because of disabled transitive dependencies
         force 'commons-cli:commons-cli:1.3.1'
         force 'org.apache.httpcomponents:httpcore:4.4.12'
         force "org.apache.commons:commons-lang3:3.4"
         force "org.springframework:spring-core:5.3.14"
-        force "com.google.guava:guava:30.0-jre"
+        force "com.google.guava:guava:30.0-jre" //fixme can we remove it? It's declared directly in dependencies
     }
 }
 
 dependencies {
+    implementation 'org.slf4j:slf4j-api:1.7.30' //fixme because of disabled transitive dependencies
     implementation 'jakarta.annotation:jakarta.annotation-api:1.3.5'
     implementation "org.opensearch.plugin:transport-netty4-client:${opensearch_version}"
     implementation "org.opensearch.client:opensearch-rest-high-level-client:${opensearch_version}"
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.13.2' //fixme because of disabled transitive dependencies, version variable for jackson-*?
+    implementation 'com.fasterxml.jackson.core:jackson-annotations:2.13.2' //fixme because of disabled transitive dependencies, version variable for jackson-*?
     implementation 'com.google.guava:guava:30.0-jre'
     implementation 'org.greenrobot:eventbus:3.2.0'
     implementation 'commons-cli:commons-cli:1.3.1'
@@ -96,19 +184,37 @@ dependencies {
     implementation 'org.apache.httpcomponents:httpclient-cache:4.5.13'
     implementation 'io.jsonwebtoken:jjwt-api:0.10.8'
     implementation("org.apache.cxf:cxf-rt-rs-security-jose:3.4.5") {
-        exclude(group: 'jakarta.activation', module: 'jakarta.activation-api')
+        exclude(group: 'jakarta.activation', module: 'jakarta.activation-api') //fixme can we remove it, it should not be fetched since transitive dependencies are disabled
     }
+    implementation 'org.apache.cxf:cxf-rt-security:3.4.5' //fixme because of disabled transitive dependencies
+    compileOnly 'org.apache.cxf:cxf-rt-rs-json-basic:3.4.5' //fixme because of disabled transitive dependencies
+    implementation 'org.apache.cxf:cxf-core:3.4.5' //fixme because of disabled transitive dependencies
     implementation 'com.github.wnameless:json-flattener:0.5.0'
     implementation 'com.flipkart.zjsonpatch:zjsonpatch:0.4.4'
     implementation 'org.apache.kafka:kafka-clients:2.8.1'
-    implementation 'com.onelogin:java-saml:2.5.0'
-    implementation ('org.opensaml:opensaml-saml-impl:3.4.5') {
-        exclude(group: 'org.apache.velocity', module: 'velocity')
+    implementation 'com.onelogin:java-saml:2.5.0' //fixme is it required? version variable for java-saml-?
+    implementation 'com.onelogin:java-saml-core:2.5.0' //fixme because of disabled transitive dependencies, version variable for java-saml-?
+    implementation 'org.opensaml:opensaml-core:3.4.5' //fixme because of disabled transitive dependencies, version variable for opensaml-?
+    implementation 'org.opensaml:opensaml-xmlsec-impl:3.4.5' //fixme because of disabled transitive dependencies, version variable for opensaml-?
+    implementation 'org.opensaml:opensaml-xmlsec-api:3.4.5' //fixme because of disabled transitive dependencies, version variable for opensaml-?
+    implementation 'org.opensaml:opensaml-saml-api:3.4.5' //fixme because of disabled transitive dependencies, version variable for opensaml-?
+    implementation 'org.opensaml:opensaml-messaging-api:3.4.5' //fixme because of disabled transitive dependencies, version variable for opensaml-?
+    implementation 'org.opensaml:opensaml-security-api:3.4.5' //fixme because of disabled transitive dependencies, version variable for opensaml-?
+    implementation 'org.opensaml:opensaml-soap-api:3.4.5' //fixme because of disabled transitive dependencies, version variable for opensaml-?
+    implementation 'org.opensaml:opensaml-security-impl:3.4.5' //fixme because of disabled transitive dependencies, version variable for opensaml-?
+    implementation ('org.opensaml:opensaml-saml-impl:3.4.5') { //fixme version variable for opensaml-?
+        exclude(group: 'org.apache.velocity', module: 'velocity') //fixme can we remove it, it should not be fetched since transitive dependencies are disabled
     }
-    implementation 'commons-lang:commons-lang:2.4'
+    implementation 'io.dropwizard.metrics:metrics-core:3.1.2' //fixme because of disabled transitive dependencies
+    implementation 'org.cryptacular:cryptacular:1.1.4' //fixme because of disabled transitive dependencies
+    implementation 'org.apache.santuario:xmlsec:2.2.3' //fixme because of disabled transitive dependencies
+    implementation 'commons-lang:commons-lang:2.4' //fixme remove and replace usages with commons-lang3?
+    implementation 'org.apache.commons:commons-lang3:3.4' //fixme because of disabled transitive dependencies
     implementation 'commons-collections:commons-collections:3.2.2'
     implementation 'com.jayway.jsonpath:json-path:2.4.0'
+    implementation 'net.minidev:json-smart:2.4.7' //fixme because of disabled transitive dependencies
     implementation 'org.apache.httpcomponents:httpclient:4.5.13'
+    implementation 'net.shibboleth.utilities:java-support:7.5.1'
     runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.10.8'
     runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.10.8'
     testImplementation "org.opensearch.plugin:reindex-client:${opensearch_version}"
@@ -120,10 +226,22 @@ dependencies {
     testImplementation 'org.apache.logging.log4j:log4j-core:2.17.1'
     testImplementation 'commons-io:commons-io:2.7'
     testImplementation 'org.hamcrest:hamcrest-all:1.3'
-    testImplementation 'junit:junit:4.13.1'
+    testImplementation 'junit:junit:4.13.2' //todo version forced by opensearch plugin?
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.2' //fixme because of disabled transitive dependencies
     testImplementation 'org.apache.httpcomponents:fluent-hc:4.5.13'
-    testImplementation 'org.mockito:mockito-core:2.23.0'
+    testImplementation 'org.mockito:mockito-core:4.3.1' //todo version forced by opensearch plugin?
     testImplementation 'org.springframework.kafka:spring-kafka-test:2.7.9'
+    testImplementation 'org.springframework.retry:spring-retry:1.3.1' //fixme because of disabled transitive dependencies
+    testImplementation 'org.springframework:spring-core:5.3.14' //fixme because of disabled transitive dependencies
+    testImplementation 'org.scala-lang:scala-library:2.13.5' //fixme because of disabled transitive dependencies
+    testImplementation 'com.yammer.metrics:metrics-core:2.2.0' //fixme because of disabled transitive dependencies
+    testImplementation 'org.apache.zookeeper:zookeeper:3.5.9' //fixme because of disabled transitive dependencies
+    testImplementation 'org.apache.zookeeper:zookeeper-jute:3.5.9' //fixme because of disabled transitive dependencies
+    testImplementation 'org.apache.kafka:kafka-raft:2.8.1' //fixme because of disabled transitive dependencies
+    testImplementation 'org.apache.kafka:kafka-metadata:2.8.1' //fixme because of disabled transitive dependencies
+    testImplementation "org.scala-lang.modules:scala-java8-compat_2.13:0.9.1" //fixme because of disabled transitive dependencies
+    testImplementation 'com.typesafe.scala-logging:scala-logging_2.13:3.9.2' //fixme because of disabled transitive dependencies
+    testImplementation 'org.springframework:spring-beans:5.3.13' //fixme because of disabled transitive dependencies
     testImplementation 'javax.servlet:servlet-api:2.5'
     testImplementation 'com.unboundid:unboundid-ldapsdk:4.0.9'
     testImplementation 'com.github.stephenc.jcip:jcip-annotations:1.0-1'
@@ -131,6 +249,14 @@ dependencies {
     testImplementation 'org.apache.kafka:kafka_2.13:2.8.1:test'
     testImplementation 'org.apache.kafka:kafka-clients:2.8.1:test'
     compileOnly "org.opensearch:opensearch:${opensearch_version}"
+    testImplementation group: 'com.google.guava', name: 'failureaccess', version: '1.0.1'
+    testImplementation group: 'org.apache.commons', name: 'commons-text', version: '1.2'
+    testImplementation group: 'com.eclipsesource.minimal-json', name: 'minimal-json', version: '0.9.5'
+    testImplementation group: 'net.minidev', name: 'accessors-smart', version: '2.4.7'
+    testImplementation group: 'net.bytebuddy', name: 'byte-buddy', version: '1.12.7'
+    testImplementation group: 'net.bytebuddy', name: 'byte-buddy-agent', version: '1.12.7'
+    testImplementation group: 'org.objenesis', name: 'objenesis', version: '2.6'
+
 }
 
 group = 'org.opensearch'
@@ -265,17 +391,19 @@ gitProperties {
     ]
 }
 
+//todo handled by opensearchplugin
+
 // copied from: org.opensearch.gradle.dependencies.CompileOnlyResolvePlugin
-project.getConfigurations().all { Configuration configuration ->
-    if (configuration.getName().equals(JavaPlugin.COMPILE_ONLY_CONFIGURATION_NAME)) {
-        NamedDomainObjectProvider<Configuration> resolvableCompileOnly = project.getConfigurations().register('resolveableCompileOnly');
-        resolvableCompileOnly.configure { c ->
-            c.setCanBeResolved(true);
-            c.setCanBeConsumed(false);
-            c.extendsFrom(configuration);
-        };
-    }
-};
+//project.getConfigurations().all { Configuration configuration ->
+//    if (configuration.getName().equals(JavaPlugin.COMPILE_ONLY_CONFIGURATION_NAME)) {
+//        NamedDomainObjectProvider<Configuration> resolvableCompileOnly = project.getConfigurations().register('resolveableCompileOnly');
+//        resolvableCompileOnly.configure { c ->
+//            c.setCanBeResolved(true);
+//            c.setCanBeConsumed(false);
+//            c.extendsFrom(configuration);
+//        };
+//    }
+//};
 
 task bundle(dependsOn: jar, type: Zip) {
     from configurations.runtimeClasspath - project.configurations.getByName('resolveableCompileOnly')
@@ -323,30 +451,32 @@ task bundleSecurityAdminStandaloneTarGz(dependsOn: jar, type: Tar) {
     }
 }
 
-task createPluginDescriptor() {
-    List<String> descriptorProperties = [
-        "description=Provide access control related features for OpenSearch",
-        "version=${version}",
-        "name=opensearch-security",
-        "classname=org.opensearch.security.OpenSearchSecurityPlugin",
-        "java.version=${java.targetCompatibility}",
-        "opensearch.version=${version_tokens[0]}",
-    ]
-
-    new File("plugin-descriptor.properties").text = descriptorProperties.join ("\n")
-}
-bundle.doLast() {
-    new File("plugin-descriptor.properties").delete()
-}
+//todo handled by opensearchplugin
+//task createPluginDescriptor() {
+//    List<String> descriptorProperties = [
+//        "description=Provide access control related features for OpenSearch",
+//        "version=${version}",
+//        "name=opensearch-security",
+//        "classname=org.opensearch.security.OpenSearchSecurityPlugin",
+//        "java.version=${java.targetCompatibility}",
+//        "opensearch.version=${version_tokens[0]}",
+//    ]
+//
+//    new File("plugin-descriptor.properties").text = descriptorProperties.join ("\n")
+//}
+//todo remove it?
+//bundle.doLast() {
+//    new File("plugin-descriptor.properties").delete()
+//}
 
 tasks.assemble.dependsOn(bundle)
-tasks.bundle.dependsOn(createPluginDescriptor)
+//tasks.bundle.dependsOn(createPluginDescriptor) //todo handled by opensearchplugin?
 
 clean {
     delete 'data/'
 }
 
-
+//fixme read docs - is there something that generates checksums?
 task createChecksums(type: Checksum) {
     files = bundle.outputs.files
     outputDir = new File(project.buildDir, "distributions")
@@ -354,7 +484,7 @@ task createChecksums(type: Checksum) {
 }
 tasks.assemble.finalizedBy(createChecksums)
 
-
+//fixme isn't jacoco handled by opensearchplugin?
 jacoco {
     reportsDirectory = file("$buildDir/jacoco")
 }
@@ -367,6 +497,7 @@ jacocoTestReport {
 tasks.test.finalizedBy(jacocoTestReport)  // report is always generated after tests run
 tasks.jacocoTestReport.dependsOn(test) // tests are required to run before generating the report
 
+//fixme read docs - is there something that performs checkstyle?
 checkstyle {
     configFile file("config/checkstyle/sun_checks.xml")
 }

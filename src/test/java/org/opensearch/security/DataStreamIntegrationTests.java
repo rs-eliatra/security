@@ -18,12 +18,12 @@ package org.opensearch.security;
 import org.apache.http.HttpStatus;
 import org.junit.Assert;
 import org.junit.Test;
-import org.opensearch.security.test.SingleClusterTest;
+import org.opensearch.security.test.SingleClusterTests;
 import org.opensearch.security.test.helper.rest.RestHelper;
 import org.opensearch.security.test.helper.rest.RestHelper.HttpResponse;
 
 
-public class DataStreamIntegrationTests extends SingleClusterTest {
+public class DataStreamIntegrationTests extends SingleClusterTests {
 
     public String getIndexTemplateBody() {
         return  "{\"index_patterns\": [ \"my-data-stream*\" ], \"data_stream\": { }, \"priority\": 200, \"template\": {\"settings\": { } } }";

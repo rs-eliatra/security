@@ -16,7 +16,7 @@
 package org.opensearch.security;
 
 import org.opensearch.security.support.ConfigConstants;
-import org.opensearch.security.test.SingleClusterTest;
+import org.opensearch.security.test.SingleClusterTests;
 import org.opensearch.security.test.helper.cluster.ClusterConfiguration;
 import org.opensearch.security.test.helper.rest.RestHelper;
 import org.apache.http.Header;
@@ -30,7 +30,7 @@ import org.junit.Test;
 import java.io.File;
 import java.util.Arrays;
 
-public class AdvancedSecurityMigrationTests extends SingleClusterTest {
+public class AdvancedSecurityMigrationTests extends SingleClusterTests {
 
     @Before
     public void setupBefore() {

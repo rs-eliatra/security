@@ -40,11 +40,11 @@ import org.apache.http.HttpStatus;
 import org.junit.Assert;
 import org.junit.Test;
 
-import org.opensearch.security.test.SingleClusterTest;
+import org.opensearch.security.test.SingleClusterTests;
 import org.opensearch.security.test.helper.file.FileHelper;
 import org.opensearch.security.test.helper.rest.RestHelper;
 
-public class SecurityAdminInvalidConfigsTests extends SingleClusterTest {
+public class SecurityAdminInvalidConfigsTests extends SingleClusterTests {
 
 	@Test
 	public void testSecurityAdminDuplicateKey() throws Exception {

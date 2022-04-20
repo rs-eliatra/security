@@ -28,11 +28,11 @@ import org.opensearch.action.support.WriteRequest;
 import org.opensearch.common.settings.Settings;
 import org.opensearch.common.xcontent.XContentType;
 import org.opensearch.security.test.DynamicSecurityConfig;
-import org.opensearch.security.test.SingleClusterTest;
+import org.opensearch.security.test.SingleClusterTests;
 import org.opensearch.security.test.helper.rest.RestHelper;
 
 
-public class ResolveAPITests extends SingleClusterTest {
+public class ResolveAPITests extends SingleClusterTests {
     
     protected final Logger log = LogManager.getLogger(this.getClass());
 

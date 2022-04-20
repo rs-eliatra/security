@@ -58,11 +58,11 @@ import org.opensearch.security.action.configupdate.ConfigUpdateResponse;
 import org.opensearch.security.ssl.util.SSLConfigConstants;
 import org.opensearch.security.support.ConfigConstants;
 import org.opensearch.security.test.DynamicSecurityConfig;
-import org.opensearch.security.test.SingleClusterTest;
+import org.opensearch.security.test.SingleClusterTests;
 import org.opensearch.security.test.helper.file.FileHelper;
 import org.opensearch.security.test.helper.rest.RestHelper;
 
-public class InitializationIntegrationTests extends SingleClusterTest {
+public class InitializationIntegrationTests extends SingleClusterTests {
 
     @Test
     public void testEnsureInitViaRestDoesWork() throws Exception {

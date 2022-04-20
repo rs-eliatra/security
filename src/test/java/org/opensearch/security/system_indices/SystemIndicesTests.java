@@ -18,7 +18,7 @@ package org.opensearch.security.system_indices;
 import org.opensearch.client.Client;
 import org.opensearch.security.support.ConfigConstants;
 import org.opensearch.security.test.DynamicSecurityConfig;
-import org.opensearch.security.test.SingleClusterTest;
+import org.opensearch.security.test.SingleClusterTests;
 import org.opensearch.security.test.helper.file.FileHelper;
 import org.opensearch.security.test.helper.rest.RestHelper;
 import org.apache.http.Header;
@@ -50,7 +50,7 @@ import static org.junit.Assert.assertEquals;
  *  Refer:    "plugins.security.system_indices.enabled"
  *            "plugins.security.system_indices.indices";
  */
-public class SystemIndicesTests extends SingleClusterTest {
+public class SystemIndicesTests extends SingleClusterTests {
 
     private static final List<String> listOfIndexesToTest = Arrays.asList("config1", "config2");
     private static final String matchAllQuery = "{\n\"query\": {\"match_all\": {}}}";
